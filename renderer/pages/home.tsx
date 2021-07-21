@@ -1,8 +1,23 @@
-import React from 'react';
-import Head from 'next/head';
-import Link from 'next/link';
+import React, { useEffect } from 'react'
+import Head from 'next/head'
+import Link from 'next/link'
+import { addPouchPlugin, createRxDatabase, getRxStoragePouch } from 'rxdb'
+
+addPouchPlugin(require('pouchdb-adapter-idb'))
 
 function Home() {
+  const createDB = async () => {
+    const db = await createRxDatabase({
+      name: 'heroesdb', // <- name
+      storage: getRxStoragePouch('idb'), // <- storage-adapter
+    })
+    console.dir(db)
+  }
+
+  useEffect(() => {
+    createDB()
+  }, [])
+
   return (
     <React.Fragment>
       <Head>
@@ -18,7 +33,7 @@ function Home() {
         <img src="/images/logo.png" />
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
